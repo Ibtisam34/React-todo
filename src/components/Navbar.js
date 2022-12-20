@@ -4,6 +4,7 @@ import { MdClose } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
 
 const Navbar = () => {
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const links = [
     {
       id: 1,
@@ -16,15 +17,15 @@ const Navbar = () => {
       text: 'About',
     },
   ];
-  const [navbarOpen, setNavbarOpen] = useState(false);
+
   const handleToggle = () => {
-    setNavbarOpen(!navbarOpen);
+    setNavbarOpen((prev) => !prev);
   };
+
   const closeMenu = () => {
     setNavbarOpen(false);
   };
   return (
-
     <nav className="navBar">
       <button type="button" onClick={handleToggle}>
         {navbarOpen ? (
@@ -34,15 +35,24 @@ const Navbar = () => {
         )}
       </button>
       <ul className={`menuNav ${navbarOpen ? ' showMenu' : ''}`}>
-        {links.map((link) => (
-          <li key={link.id} className="navItem">
-            <NavLink to={link.path} activeClassName="active-link" onClick={() => closeMenu()} exact>
-              {link.text}
-            </NavLink>
-          </li>
-        ))}
+        {/* eslint-disable-next-line arrow-body-style */}
+        {links.map((link) => {
+          return (
+            <li key={link.id}>
+              <NavLink
+                to={link.path}
+                className="active-link"
+                onClick={() => closeMenu()}
+                exact="false"
+              >
+                {link.text}
+              </NavLink>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
 };
+
 export default Navbar;

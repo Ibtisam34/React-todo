@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import NotMatch from '../Pages/NotMatch';
 import About from '../Pages/About';
 import Navbar from './Navbar';
-import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
+import TodosList from './TodosList';
 
 const TodoContainer = () => {
-  function getInitialTodos() {
+  const getInitialTodos = () => {
+    // getting stored items
     const temp = localStorage.getItem('todos');
     const savedTodos = JSON.parse(temp);
     return savedTodos || [];
-  }
-
+  };
   const [todos, setTodos] = useState(getInitialTodos());
-
-  useEffect(() => {
-    const temp = JSON.stringify(todos);
-    localStorage.setItem('todos', temp);
-  }, [todos]);
 
   const handleChange = (id) => {
     setTodos((prevState) => prevState.map((todo) => {
@@ -35,10 +31,9 @@ const TodoContainer = () => {
 
   const delTodo = (id) => {
     setTodos([
-
       ...todos.filter((todo) => todo.id !== id),
-
     ]);
+    localStorage.setItem('todos', JSON.stringify([...todos.filter((todo) => todo.id !== id)]));
   };
 
   const addTodoItem = (title) => {
@@ -48,21 +43,20 @@ const TodoContainer = () => {
       completed: false,
     };
     setTodos([...todos, newTodo]);
+    localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
   };
 
   const setUpdate = (updatedTitle, id) => {
     setTodos(
       todos.map((todo) => {
         if (todo.id === id) {
-          const { title } = todo;
-          return {
-            ...todo,
-            title: updatedTitle || title,
-          };
+          /* eslint-disable-next-line no-param-reassign */
+          todo.title = updatedTitle;
         }
         return todo;
       }),
     );
+    localStorage.setItem('todos', JSON.stringify(todos));
   };
 
   return (
@@ -84,9 +78,10 @@ const TodoContainer = () => {
                 />
               </div>
             </div>
-)}
+        )}
         />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotMatch />} />
       </Routes>
     </>
   );

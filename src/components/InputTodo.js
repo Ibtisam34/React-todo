@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { FaPlusCircle } from 'react-icons/fa';
 
 const InputTodo = (props) => {
-  const [title, setTitle] = useState('');
+  const [inputText, setInputText] = useState({
+    title: '',
+  });
 
   const onChange = (e) => {
-    setTitle(e.target.value);
+    setInputText({
+      ...inputText,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { addTodoProps } = props;
-    if (title.trim()) {
-      addTodoProps(title);
-      setTitle('');
+    if (inputText.title.trim()) {
+      /* eslint-disable-next-line react/destructuring-assignment */
+      props.addTodoProps(inputText.title);
+      setInputText({
+        title: '',
+      });
     } else {
       alert('Please write item');
     }
@@ -26,19 +32,15 @@ const InputTodo = (props) => {
         type="text"
         className="input-text"
         placeholder="Add todo..."
-        value={title}
+        value={inputText.title}
         name="title"
         onChange={onChange}
       />
-      <button type="submit" className="input-submit" aria-label="submit">
+      <button type="submit" className="input-submit">
         <FaPlusCircle />
       </button>
     </form>
   );
-};
-
-InputTodo.propTypes = {
-  addTodoProps: PropTypes.func.isRequired,
 };
 
 export default InputTodo;

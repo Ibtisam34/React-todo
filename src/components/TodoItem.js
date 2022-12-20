@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { FaTrash } from 'react-icons/fa';
 import styles from './TodoItem.module.css';
 
 const TodoItem = (props) => {
   const [editing, setEditing] = useState(false);
-
-  useEffect(() => () => {
-    console.log('Cleaning up...');
-  }, []);
 
   const handleEditing = () => {
     setEditing(true);
@@ -27,10 +22,9 @@ const TodoItem = (props) => {
     textDecoration: 'line-through',
   };
 
-  const {
-    todo, handleChangeProps, deleteTodoProps, setUpdate,
-  } = props;
-  const { completed, id, title } = todo;
+  /* eslint-disable-next-line react/destructuring-assignment */
+  const { completed, id, title } = props.todo;
+
   const viewMode = {};
   const editMode = {};
 
@@ -40,49 +34,43 @@ const TodoItem = (props) => {
     editMode.display = 'none';
   }
 
+  useEffect(() => {
+    /* eslint-disable-next-line no-unused-expressions */
+    () => {
+      console.log('Cleaning up...');
+    };
+  }, []);
+
   return (
     <li className={styles.item}>
       <div onDoubleClick={handleEditing} style={viewMode}>
         <input
-          className={styles.checkbox}
           type="checkbox"
+          className={styles.checkbox}
+          /* eslint-disable-next-line react/destructuring-assignment */
           checked={completed}
-          onChange={() => handleChangeProps(id)}
+          /* eslint-disable-next-line react/destructuring-assignment */
+          onChange={() => props.handleChangeProps(id)}
         />
-        <button
-          type="button"
-          onClick={() => deleteTodoProps(id)}
-        >
-          <FaTrash
-            style={{ color: 'darkcyan', fontSize: '20px', marginTop: '2px' }}
-          />
+        {/* eslint-disable-next-line react/destructuring-assignment */}
+        <button type="button" onClick={() => props.deleteTodoProps(id)}>
+          <FaTrash />
         </button>
-        <span style={completed ? completedStyle : null}>
-          {title}
-        </span>
+        <span style={completed ? completedStyle : null}>{title}</span>
       </div>
       <input
         type="text"
-        className={styles.textInput}
         style={editMode}
+        className={styles.textInput}
         value={title}
-        onChange={(e) => { setUpdate(e.target.value, id); }}
+        onChange={(e) => {
+          /* eslint-disable-next-line react/destructuring-assignment */
+          props.setUpdate(e.target.value, id);
+        }}
         onKeyDown={handleUpdatedDone}
       />
-
     </li>
   );
-};
-
-TodoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  }).isRequired,
-  handleChangeProps: PropTypes.func.isRequired,
-  deleteTodoProps: PropTypes.func.isRequired,
-  setUpdate: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
