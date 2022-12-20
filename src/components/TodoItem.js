@@ -22,7 +22,6 @@ const TodoItem = (props) => {
     textDecoration: 'line-through',
   };
 
-  /* eslint-disable-next-line react/destructuring-assignment */
   const { completed, id, title } = props.todo;
 
   const viewMode = {};
@@ -34,11 +33,9 @@ const TodoItem = (props) => {
     editMode.display = 'none';
   }
 
-  useEffect(() => {
-    /* eslint-disable-next-line no-unused-expressions */
-    () => {
-      console.log('Cleaning up...');
-    };
+
+  useEffect(() => () => {
+    console.log('Cleaning up...');
   }, []);
 
   return (
@@ -47,14 +44,16 @@ const TodoItem = (props) => {
         <input
           type="checkbox"
           className={styles.checkbox}
-          /* eslint-disable-next-line react/destructuring-assignment */
           checked={completed}
-          /* eslint-disable-next-line react/destructuring-assignment */
           onChange={() => props.handleChangeProps(id)}
         />
-        {/* eslint-disable-next-line react/destructuring-assignment */}
-        <button type="button" onClick={() => props.deleteTodoProps(id)}>
-          <FaTrash />
+        <button
+          type="button"
+          onClick={() => props.deleteTodoProps(id)}
+        >
+          <FaTrash
+            style={{ color: 'darkcyan', fontSize: '20px', marginTop: '2px' }}
+          />
         </button>
         <span style={completed ? completedStyle : null}>{title}</span>
       </div>
@@ -64,7 +63,6 @@ const TodoItem = (props) => {
         className={styles.textInput}
         value={title}
         onChange={(e) => {
-          /* eslint-disable-next-line react/destructuring-assignment */
           props.setUpdate(e.target.value, id);
         }}
         onKeyDown={handleUpdatedDone}
@@ -72,5 +70,7 @@ const TodoItem = (props) => {
     </li>
   );
 };
+
+
 
 export default TodoItem;
